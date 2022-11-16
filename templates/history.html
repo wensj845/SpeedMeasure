@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../static/favicon.ico">
+    <script src="../static/history.js" type="text/javascript"></script>
+    <script src="../static/echarts.js" type="text/javascript"></script>
+    <script src="../static/auth.js" type="text/javascript"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="../static/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../static/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="theme.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]>
+    <script src="../static/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../static/assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+    <title style="margin-top:15px">历史记录</title>
+    <style>
+        body {
+            background-color: #d0e4fe;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        .inputline{
+            display: flex;
+            align-items: center;
+        }
+
+        .reportMain {
+            width: 900px;
+            height: 600px;
+            margin-top: 100px;
+            border: rgb(199, 199, 83) 3px solid ;
+        }
+        .rmd {
+            margin-left: -32px;
+        }
+        .main {
+            margin-top: 50px;
+        }
+        .project_screen {
+            border: rgb(199, 199, 83) 3px solid ;
+        }
+        .rma {
+            margin-left: 2px;
+        }
+        .row {
+            margin-top: 30px;
+        }
+        .list-rt-item {
+            height: 40px;
+        }
+        .dbtn{
+            padding: 2px 12px;
+        }
+        .da{
+            height: 46px
+        }
+    </style>
+</head>
+<body onload="authority();defaultPro();allData();defaultFuncs();">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav" style="display: flex;width: 100%;">
+                <li ><a href="/speedmeasure">Speed Measure</a></li>
+                <li id="adNav"><a href="/setting">系统设置</a></li>
+                <li class="active"><a href="/history">历史记录</a></li>
+                <li style="margin-left: auto;display:flex;" id="logOut"><a href="/auth/logout" style="text-decoration:underline;">退出登录</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container main" role="main">
+        <input id="default" type="text" value="" hidden/>
+        <h1 style="margin-top:12px">历史记录</h1>
+        <div class="row rmd">
+            <div class=" col-md-4">
+                <div class="col-md-3">
+                    <select class="form-control" name="project" id="selectProject" style="height:30px;width:165px;margin-right: 5px;padding: 0px;background-color: #f1f1f1;" onchange="searchFunction()">
+                     {% for row in rows %}
+                        <option value={{row["id"]}}>{{row["project"]}}</option>
+                      {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="list-group" id="fcList">
+                </div>
+            </div>
+        </div>
+        <div class="row rma" id="data_area">
+            <div class="col-md-4">
+                <div class="row pre-scrollable" style="margin-top: 0; max-height:520px">
+                    <div class="list-group" id="resList" style="margin-bottom:0">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="ert" style="width: 823px;height:600px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

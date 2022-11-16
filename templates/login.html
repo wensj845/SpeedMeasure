@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../static/favicon.ico">
+
+    <title>Signin Template for Bootstrap</title>
+
+    <script src="../static/login.js" type="text/javascript"></script>
+    <link href="../static/signin.css" rel="stylesheet">
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+    <style type="text/css">
+      .mrw {
+        margin-left:auto;
+        margin-right:auto;
+      }
+      body {
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #eee;
+      }
+      .input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
+        z-index: 2;
+        margin-left: -1px;
+        height: 45px;
+        margin-top: -12px;
+     }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="container">
+      <form action="/login" class="form-signin" method="post">
+        <h2 class="form-signin-heading">请登录</h2>
+        <label for="inputEmail" class="sr-only">邮箱地址</label>
+        <input type="email" id="inputEmail" class="form-control" placeholder="请输入您的邮箱" name="email" value="{{email}}" required autofocus>
+        <label for="inputPassword" class="sr-only">账户密码</label>
+        <div class="input-group">
+            <input type="password" id="inputPassword" class="form-control" placeholder="请输入您的密码" name="pwd" value="{{pwd}}" required>
+            <span class="input-group-btn">
+              <button class="btn btn-default glyphicon glyphicon-eye-close" type="button" id="eyes" onclick="eyeclicklg()"></button>
+            </span>
+        </div>
+        {% if msg=='用户名或密码输入错误' %}
+        <div class="alert alert-danger" role="alert">{{msg}}</div>
+        {% endif %}
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me" name="remember-me" > 记住我
+          </label>
+          <label>
+            <a href="/auth/register">没有账号？点击注册</a>
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit" >登录</button>
+      </form>
+
+    </div> <!-- /container -->
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../static/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

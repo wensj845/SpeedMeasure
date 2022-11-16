@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../static/favicon.ico">
+
+    <title>speed measure</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="../static/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../static/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="theme.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]>
+    <script src="../static/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../static/assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!--[引用自定义的script]-->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../static/speedmeasure.js" type="text/javascript"></script>
+    <script src="../static/auth.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-select.min.css">
+    <script src="js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/bootstrap-select.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+        body {
+            background-color: #d0e4fe;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .images-warp {
+            border: 2px solid #000;
+            display: flex;
+            flex-wrap: wrap;
+            width: 1150px;
+            height: 400px;
+            align-items: center;
+            justify-content: space-around;
+            overflow: auto;
+        }
+
+        .images {
+            width: 90px;
+            height: 180px;
+        }
+
+        .images-item {
+            width: 100px;
+            height: 200px;
+            margin: 10px 10px 30px 10px;
+            padding: 5px;
+            position: relative;
+        }
+
+        .icon {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            border: 2px solid #fff;
+        }
+
+        .filename {
+            position: absolute;
+            bottom: -20px;
+            color: #000;
+            font-size: 12px;
+            width: 100%;
+            text-align: center;
+            left: 0;
+        }
+
+        .myFileUpload {
+            position: absolute;
+            display: block;
+            width: 100px;
+            height: 40px;
+            opacity: 0;
+        }
+
+        /*蓝色按钮,绝对定位*/
+        .blueButton {
+            position: absolute;
+            display: block;
+            width: 100px;
+            height: 40px;
+            background-color: rgb(48, 115, 172);
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            font: normal normal normal 16px/40px "Microsoft YaHei";
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .images:hover {
+            transform: scale(1.6, 1.6);
+        }
+
+        .item-text {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 20px;
+            margin-top: 5px
+        }
+
+        input[type=checkbox],
+        input[type=radio] {
+            margin-top: 0;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body onload="authority();loadPicture();">
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav" style="display: flex;width: 100%;">
+                    <li class="active"><a href="/speedmeasure">Speed Measure</a></li>
+                    <li id="adNav"><a href="/setting">系统设置</a></li>
+                    <li><a href="/history">历史记录</a></li>
+                    <li style="margin-left: auto;display:flex;" id="logOut"><a href="/auth/logout" style="text-decoration:underline;">退出登录</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container theme-showcase" role="main">
+        <br />
+        <br />
+        <div>
+            <h1>上传视频</h1>
+            <p>请上传待测的录制视频</p>
+            <form name="form1" class="form-inline" action="/speedmeasure/uploader" method="POST"
+                enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="button" value="选取文件" class="btn btn-sm btn-primary" onclick="getFile()">
+                    <input style="display: none" type="file" name="file" id="getF" onchange="clickF()" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" id="upload_btn" class="btn btn-sm btn-success"
+                        onclick='javascript:{this.disabled=true;document.getElementById("Prompt").innerHTML = "正在解析视频文件，请稍后...";document.form1.submit();}' disabled>上传文件</button>
+                </div>
+            </form>
+            <div>
+                <p></p>
+                <p id="Prompt"></p>
+                {% if error %}
+                    <script>
+                        $("#Prompt").text("Error：文件上传失败，请检查文件类型!");
+                    </script>
+                {% endif %}
+                {% if split_error %}
+                    <script>
+                        $("#Prompt").text("Error：文件解析失败，请检查视频文件内容和ffmpeg配置！");
+                    </script>
+                {% endif %}
+                {% if imgfile %}
+                    <input type="hidden" id="qushuju" value="{{ imgfile }}">
+                    <script>
+                        $("#Prompt").text("视频文件解析完成");
+                    </script>
+                {% endif %}
+            </div>
+        </div>
+        <div>
+            <h1>拆帧结果</h1>
+            <p>请手动选择起始帧、结束帧</p>
+            <div class="images-warp" id="images" style="border-radius: 25px;"></div>
+            <p></p>
+            <div class="form-group">
+                <p>
+                    <button onclick="speedMeasure()" type="button" id="measure_btn" class="btn btn-sm btn-primary" disabled>计算</button>
+                    <button onclick="clean()" type="button" id="clean_btn" class="btn btn-sm btn-info" disabled>重置</button>
+                    <!--弹窗悬着项目和功能-->
+                    <!-- 按钮触发模态框 -->
+                    <button class="btn btn-sm btn-success" id="save_btn" data-toggle="modal" data-target="#saveModal" disabled>保存</button>
+                    <button class="btn btn-sm btn-warning" id="smart_btn" data-toggle="modal" data-target="#smartModal" style="margin-left: 20px;" disabled>智能选帧</button>
+                    <button class="btn btn-sm btn-success" id="baseline_btn" data-toggle="modal" data-target="#baseModal" disabled>保存基线</button>
+                    <!-- 模态框（Modal） -->
+                    <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel"
+                        aria-hidden="true" closeAfterEdit="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                                    </button>
+                                    <h4 class="modal-title" id="saveModalLabel">测试结果存档</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <h5>请选择项目和功能点</h5>
+                                    <div>
+                                        <div style="display: flex;">
+                                            <select id="save_sel_project" class="form-control selectpicker"
+                                                name="save_sel_project" data-live-search="true" data-actions-box="true" style="margin-right: 5px;">
+                                            </select>
+                                            <select id="save_sel_function" class="form-control selectpicker"
+                                                name="save_sel_function" data-live-search="true" data-actions-box="true" style="margin-right: 5px;">
+                                            </select>
+                                            <input type="text" name="function" id="duration_txt" style="height:34px;margin-right: 5px;background-color: #dff0d8;" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button onclick="saveResult()" type="button" class="btn btn-primary"
+                                        data-dismiss="modal">确认</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
+                    </div>
+                    <!-- 模态框（Modal） -->
+                    <div class="modal fade" id="smartModal" tabindex="-1" role="dialog" aria-labelledby="smartModalLabel"
+                        aria-hidden="true" closeAfterEdit="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                                    </button>
+                                    <h4 class="modal-title" id="smartModalLabel">智能选帧</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <h5>请选择项目和功能点</h5>
+                                    <div>
+                                        <div style="display: flex;">
+                                            <select id="smart_sel_project" class="form-control selectpicker"
+                                                name="smart_sel_project" data-live-search="true" data-actions-box="true" style="margin-right: 5px;background-color: #f1f1f1;">
+                                            </select>
+                                            <select id="smart_sel_function" class="form-control selectpicker"
+                                                name="smart_sel_function" data-live-search="true" data-actions-box="true" style="margin-right: 5px;background-color: #f1f1f1;">
+                                            </select>
+                                        </div>
+                                        <p></p>
+                                        <p id="smart_prompt"></p>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="smart_cancel" type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button id="smart_confirm" onclick="smartFrameSel()" type="button" class="btn btn-primary"
+                                        data-dismiss="modal">确认</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
+                    </div>
+                     <!-- 模态框（Modal） -->
+                    <div class="modal fade" id="baseModal" tabindex="-1" role="dialog" aria-labelledby="baseModalLabel"
+                        aria-hidden="true" closeAfterEdit="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                                    </button>
+                                    <h4 class="modal-title" id="baseModalLabel">保存基线</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <h5>请选择项目和功能点</h5>
+                                    <div>
+                                        <div style="display: flex;">
+                                            <select id="base_sel_project" class="form-control selectpicker"
+                                                name="base_sel_project" data-live-search="true" data-actions-box="true" style="margin-right: 5px;background-color: #f1f1f1;">
+                                            </select>
+                                            <select id="base_sel_function" class="form-control selectpicker"
+                                                name="base_sel_function" data-live-search="true" data-actions-box="true" style="margin-right: 5px;background-color: #f1f1f1;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button onclick="saveBase()" type="button" class="btn btn-primary"
+                                        data-dismiss="modal">确认</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
+                    </div>
+                </p>
+            </div>
+        </div>
+        <div>
+            <h1>耗时</h1>
+            <div class="alert alert-success" role="alert" id="show_start_time">暂无结果</div>
+        </div>
+    </div>
+</body>
+<script>
+    var init_project_id = null
+
+    //初始化弹窗
+    $('#saveModal').on('shown.bs.modal', function () {
+        $("#duration_txt").val("本次耗时：" + measure_time_s.toString()+ " 秒");
+        $("#save_sel_project").empty()
+        $("#save_sel_function").empty()
+        $.ajaxSettings.async = false; //将ajax设为异步模式，防止init_project_id为null
+        getAllProjects()
+        console.log("init_project_id",init_project_id)
+        updateSelectFunction(init_project_id);
+    })
+
+    $('#smartModal').on('shown.bs.modal', function () {
+        $("#smart_sel_project").empty()
+        $("#smart_sel_function").empty()
+        $.ajaxSettings.async = false; //将ajax设为异步模式，防止init_project_id为null
+        getAllProjects()
+        console.log("init_project_id",init_project_id)
+        updateSelectFunction(init_project_id);
+    })
+
+    $('#baseModal').on('shown.bs.modal', function () {
+        $("#base_sel_project").empty()
+        $("#base_sel_function").empty()
+        $.ajaxSettings.async = false; //将ajax设为异步模式，防止init_project_id为null
+        getAllProjects()
+        console.log("init_project_id",init_project_id)
+        updateSelectFunction(init_project_id);
+    })
+
+    $('#smart_sel_project').on("change", function () {
+        //获取所选值
+        var selectedValue = $('#smart_sel_project').find("option:selected").attr('Value')
+        //先清空方向下拉菜单的option
+        document.getElementById("smart_sel_function").options.length = 0;
+        $.ajaxSettings.async = false; //防止objson出现undefined,设置为同步
+        updateSelectFunction(selectedValue);
+    })
+
+    $('#save_sel_project').on("change", function () {
+        //获取所选值
+        var selectedValue = $('#save_sel_project').find("option:selected").attr('Value')
+        //先清空方向下拉菜单的option
+        document.getElementById("save_sel_function").options.length = 0;
+        $.ajaxSettings.async = false; //防止objson出现undefined,设置为同步
+        updateSelectFunction(selectedValue);
+    })
+
+    $('#base_sel_project').on("change", function () {
+        //获取所选值
+        var selectedValue = $('#base_sel_project').find("option:selected").attr('Value')
+        //先清空方向下拉菜单的option
+        document.getElementById("base_sel_function").options.length = 0;
+        $.ajaxSettings.async = false; //防止objson出现undefined,设置为同步
+        updateSelectFunction(selectedValue);
+    })
+
+    var checkedCount = 0 //已选择的帧数
+    var div = document.getElementById("images")
+    var imlist = ""
+    // 加载视频拆帧后的结果
+    function loadPicture() {
+        var imagePath = document.getElementById("qushuju").getAttribute('value').split('-')[0]
+        var imageNum = parseInt(document.getElementById("qushuju").getAttribute('value').split('-')[1])
+        for (let index = 1; index <= imageNum; index++) {
+            var path = imagePath + "/" + index + ".png"
+            imlist =
+                imlist + '<div class="images-item">'
+            imlist =
+                imlist +
+                '<img class="images" src="' +
+                path +
+                '" id="preview' +
+                index +
+                '" />'
+            imlist =
+                imlist +
+                '<div class="item-text"><input type="checkbox" onclick="return checkCount(this)" value="' +
+                index + '">' + index + '.png</div>'
+            imlist =
+                imlist +
+                '</div>'
+        }
+        div.innerHTML = imlist
+        //视频解析完成后，计算按钮和智能选帧按钮可用
+        document.getElementById("measure_btn").removeAttribute("disabled");
+        document.getElementById("smart_btn").removeAttribute("disabled");
+        document.getElementById("baseline_btn").removeAttribute("disabled");
+    }
+
+    //最多只允许选择两帧即起始帧和结束帧
+    function checkCount(obj) {
+        if (obj.checked === true) {
+            if (checkedCount >= 2) {
+                alert("最多只能选择2帧");
+                return false;
+            }
+            checkedCount++;
+            //选中图片后重置按钮可用
+            document.getElementById("clean_btn").removeAttribute("disabled");
+        } else {
+            checkedCount--;
+            //未选中图片时重置按钮置灰
+            if(checkedCount<=0){
+                document.getElementById("clean_btn").setAttribute("disabled",true);
+            }
+        }
+        return true
+    }
+
+    //重置选帧
+    function clean() {
+        var inputElements = document.getElementsByTagName("input")
+        for (var i = 0; i < inputElements.length; i++) {
+            if (inputElements[i].type === "checkbox" && inputElements[i].checked === true) {
+                inputElements[i].checked = false
+            }
+        }
+        checkedCount = 0
+        //未选中图片时重置按钮置灰
+        document.getElementById("clean_btn").setAttribute("disabled",true);
+    }
+
+    function getFile() {
+        $("#getF").click();
+    }
+    var filename = "";
+    function clickF() {
+        filename = ""
+        filename = $("#getF").val();
+        var filenames = filename.split("\\");
+        filename = filenames[filenames.length - 1];
+        $("#Prompt").text(filename);
+        if(filename != ""){
+            //点击选取文件后，上传文件按钮可用
+            document.getElementById("upload_btn").removeAttribute("disabled");
+        }
+    }
+</script>
+
+</html>
