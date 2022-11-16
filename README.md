@@ -2,7 +2,7 @@
 ## 简介
 SpeedMeasure是一款开源测试工具，用于精确测量耗时，例如App的冷热启动速度。
 ## 安装
-1.支持Mac、Windows和Linux安装
+1.支持Mac、Windows和Linux安装  
 2.git clone下载工程后，在根目录下运行“python run.py”即可启动服务  
 3.浏览器访问http://127.0.0.1:12355/
 ## 使用技巧
