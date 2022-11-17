@@ -4,7 +4,7 @@ SpeedMeasure是一款开源测试工具，用于精确测量耗时，例如App�
 ## 安装
 1.支持Mac、Windows和Linux安装；  
 2.git clone下载工程后，在根目录下运行“python run.py”即可启动服务； 
-![image](https://github.com/wensj845/SpeedMeasure/tree/master/img/startserver.png)  
+![image](https://github.com/wensj845/SpeedMeasure/tree/master/img/startserver.png)
 3.浏览器访问http://127.0.0.1:12355/ 。
 ## 使用技巧
 1.在手机上录制视频（例如App启动过程），目前只支持mp4格式；  
