@@ -235,7 +235,7 @@ def saveBase():
 #---------------------------------------拆分视频-------------------------------------------------
 def split_video(video_path):
     timestamp = str(int(round(time.time() * 1000)))
-    path_photo = "../speed_measure/static/" + timestamp
+    path_photo = "./static/" + timestamp
     os.makedirs(path_photo)
     file_count = 0
     try:

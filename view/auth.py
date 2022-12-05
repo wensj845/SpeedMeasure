@@ -6,6 +6,7 @@
 import re
 import os
 import sqlite3
+import hashlib
 
 from flask import jsonify, request, render_template, flash, redirect, url_for, send_from_directory, session, \
     make_response, Blueprint
@@ -81,7 +82,7 @@ def doRegister():
                 return render_template('register.html', msg='用户已经存在', rEmail=rEmail, rUser=rUser, rPwd=rPwd, raPwd=raPwd)
             command = """
                     INSERT INTO user (email,password,username,administrator) VALUES('{rEmail}','{rPwd}','{rUser}',0)
-                """.format(rEmail=rEmail, rPwd=rPwd, rUser=rUser)
+                """.format(rEmail=rEmail, rPwd=loadMd5(rPwd), rUser=rUser)
             print(command)
             cur.execute(command)
             con.commit()
@@ -114,3 +115,7 @@ def validatefu(cur, rEmail):
     return one[0] == 0
 
 
+def loadMd5(src):
+    m2 = hashlib.md5()
+    m2.update(src.encode())
+    return m2.hexdigest()

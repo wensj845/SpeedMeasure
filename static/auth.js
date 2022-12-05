@@ -26,7 +26,7 @@ function authority(){
                     }
                   }
                   console.log("data.name=",data.name)
-                  document.getElementById("logOut").innerHTML = '<a>'+ data.name +'</a><a href="/auth/logout" style="text-decoration:underline;">退出登录</a>'
+                  document.getElementById("logOut").innerHTML = '<a><span class="glyphicon glyphicon-user"></span>'+"  " +data.name +'</a><a href="/auth/logout"><span class="glyphicon glyphicon-log-in"></span>  退出登录</a>'
             }
         }
     });

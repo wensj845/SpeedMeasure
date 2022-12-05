@@ -9,6 +9,7 @@ update:
 import re
 import os
 import sqlite3
+import hashlib
 
 from flask import jsonify, request, render_template, flash, redirect, url_for, send_from_directory, session, \
     make_response, Blueprint
@@ -40,7 +41,7 @@ def login():
                         email = '{email}'
                     and
                         password = '{pwd}'
-                """.format(email=email, pwd=pwd)
+                """.format(email=email, pwd=loadMd5(pwd))
             cur.execute(command)
             one = cur.fetchone()
 
@@ -74,6 +75,12 @@ def loadUserName(cur, email):
     cur.execute(comm)
     one = cur.fetchone()
     return one[0]
+
+
+def loadMd5(src):
+    m2 = hashlib.md5()
+    m2.update(src.encode())
+    return m2.hexdigest()
 
 # """登录退出"""
 # @web.route('/login/', methods=['GET', 'POST','PUT','PATCH','DELETE'])
