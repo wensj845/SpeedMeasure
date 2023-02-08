@@ -19,7 +19,6 @@ def logout():
     session.clear()
     return redirect("/")
 
-
 @auth.route('/', methods=['GET', 'POST'])
 def authority():
     try:
@@ -29,7 +28,6 @@ def authority():
     except Exception as e:
         print(e)
         return jsonify({"code": "500"})
-
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():

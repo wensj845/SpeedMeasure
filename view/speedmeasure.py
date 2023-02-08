@@ -96,7 +96,7 @@ def sm():
 def measure():
     start_photo_number = request.values.get("startFrame")
     end_photo_number = request.values.get("endFrame")
-    start_time = (int(end_photo_number)-int(start_photo_number)) * 100
+    start_time = (int(end_photo_number)-int(start_photo_number)) * 10
     return jsonify({"code": "200", "result": start_time, "msg": "计算完成"})
 
 @speedmeasure.route('/uploader', methods=['GET', 'POST','PUT','PATCH','DELETE'])
@@ -149,31 +149,43 @@ def smartSel():
                     similarity = classify_hist_with_split(baseline_start_frame,target_frame, size=(256, 256))
                     #print('三直方图算法相似度：', similarity)
                     start_similarity.append(similarity)
-
+                print(start_similarity)
                 # 比较基线与结束帧间的相似度
                 for i in range(1, int(imageNum) + 1):
                     target_frame = imagePath + "/" + str(i) + ".png"
                     target_frame = target_frame[1:] #特殊处理，修改相对路径
                     similarity = classify_hist_with_split(baseline_end_frame, target_frame, size=(256, 256))
                     end_similarity.append(similarity)
+                print(end_similarity)
+                # 找开始帧，需要先找到与开始帧最相似的一帧，跳过前面可能存在的无关帧（多录制了一段视频）
+                max_similarity_index = 0
+                max_similarity = 0
+                for i in range(1, int(imageNum) + 1):
+                    if start_similarity[i] > max_similarity:
+                        max_similarity_index = i
+                        max_similarity = start_similarity[i]
+                # print(max_similarity)
+                # print(max_similarity_index)
 
                 while threshold >= 0.1:
                     print('阀值：', threshold)
                     start_threshold = threshold
                     end_threshold = threshold
 
-                    if threshold < 0.5:
-                        start_threshold = 0.50
+                    # if threshold < 0.5:
+                    #     start_threshold = 0.50
                     #根据基线，寻找开始帧
-                    for i in range(1,int(imageNum)+1):
+                    for i in range(max_similarity_index,int(imageNum)+1):
                         if start_similarity[i] < start_threshold:
-                            startFrame = i - 1
+                            if startFrame == 0:
+                                startFrame = i - 1
                             print('找到开始帧：', startFrame)
                             break
                     # 根据基线，寻找结束帧
                     for i in range(1, int(imageNum) + 1):
                         if end_similarity[i] > end_threshold:
-                            endFrame = i
+                            if endFrame == 0:
+                                endFrame = i
                             print('找到结束帧：', endFrame)
                             break
                     if startFrame != 0 and endFrame != 0:
@@ -241,10 +253,10 @@ def split_video(video_path):
     try:
         sysstr = platform.system()
         if sysstr =="Windows":
-            command = r"ffmpeg.exe -i {audio_path} -r 10 {path_photo}/%d.png".format(
+            command = r"ffmpeg.exe -i {audio_path} -r 100 {path_photo}/%d.png".format(
                         audio_path=video_path, path_photo=path_photo)
         else:
-            command = r"./ffmpeg -i {audio_path} -r 10 {path_photo}/%d.png".format(
+            command = r"./ffmpeg -i {audio_path} -r 100 {path_photo}/%d.png".format(
                 audio_path=video_path, path_photo=path_photo)
         os.system(command)
         for root, dir, files in os.walk(path_photo):

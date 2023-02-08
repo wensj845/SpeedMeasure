@@ -121,7 +121,7 @@
         }
 
         .images:hover {
-            transform: scale(2.0, 2.0);
+            transform: scale(3.0, 3.0);
             z-index: 999;
             position: absolute;
         }
@@ -342,7 +342,7 @@
 
     //初始化弹窗
     $('#saveModal').on('shown.bs.modal', function () {
-        $("#duration_txt").val("本次耗时：" + measure_time_s.toString()+ " 秒");
+        $("#duration_txt").val("本次耗时：" + measure_time_s.toString()+ " 毫秒");
         $("#save_sel_project").empty()
         $("#save_sel_function").empty()
         $.ajaxSettings.async = false; //将ajax设为异步模式，防止init_project_id为null

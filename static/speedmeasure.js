@@ -66,7 +66,7 @@ function saveResult() {
         success: function (data) {
             console.log(data)
             if (data.code == "200") {
-                document.getElementById("show_start_time").innerHTML = "本次耗时为 " + measure_time_s.toString()+ " 秒，数据保存成功！"
+                document.getElementById("show_start_time").innerHTML = "本次耗时为 " + measure_time_s.toString()+ " 毫秒，数据保存成功！"
                 //alert("测试结果存档成功");
             } else {
                 document.getElementById("show_start_time").innerHTML = "测试结果存档失败，请检查项目和功能点是否存在！"
@@ -111,8 +111,9 @@ function speedMeasure() {
                 alert("度量计算失败，请重新计算");
             }
             //耗时折算成秒
-            measure_time_s = measure_time/1000
-            document.getElementById("show_start_time").innerHTML = "<b>本次耗时为 " + measure_time_s.toString()+ " 秒</b>"
+            //measure_time_s = measure_time/1000
+            measure_time_s = measure_time
+            document.getElementById("show_start_time").innerHTML = "<b>本次耗时为 " + measure_time_s.toString()+ " 毫秒</b>"
         }
     });
 }

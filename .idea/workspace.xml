@@ -5,20 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ffb5b17-fbd9-4685-8e00-7cb527df7ac7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SpeedMeasure.db" beforeDir="false" afterPath="$PROJECT_DIR$/SpeedMeasure.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/calculate.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/save.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/savebase.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/smartSel.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/splitImg.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/startserver.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/history.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/history.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/speedmeasure.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/speedmeasure.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/speedmeasure.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/speedmeasure.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/1234.mp4" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/view/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/view/auth.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/view/index.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/view/speedmeasure.py" beforeDir="false" afterPath="$PROJECT_DIR$/view/speedmeasure.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
