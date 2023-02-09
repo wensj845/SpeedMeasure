@@ -414,7 +414,7 @@
                 path +
                 '" id="preview' +
                 index +
-                '" />'
+                '" onclick="chooseImg(this)"/>'
             imlist =
                 imlist +
                 '<div class="item-text"><input type="checkbox" onclick="return checkCount(this)" value="' +
@@ -430,6 +430,12 @@
         document.getElementById("baseline_btn").removeAttribute("disabled");
         //视频解析完成后，清除进度条的定时器
         clearProgress();
+    }
+
+    //点击图片后同步选中对应的帧
+    function chooseImg(obj){
+        var checkbox = document.getElementById(obj.id).parentNode.children[1].children[0];
+        checkbox.click()
     }
 
     //最多只允许选择两帧即起始帧和结束帧

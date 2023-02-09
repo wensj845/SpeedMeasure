@@ -30,16 +30,30 @@ function delrest(id,fid) {
 
 
 function report(data) {
+        let d = data.functions
+        data.functions = d.reverse();
         const myChart = echarts.init(document.getElementById('ert'));
         let app = data.functions[0][3]
         let fc = data.functions[0][0]
         let dts = []
         let ts  = []
+        let avgs = []
+        let timeArr = []
+        for(let i=0;i<data.functions.length;i++){
+            timeArr.push(data.functions[i][1])
+        }
+        let avgTime = timeArr.reduce((a, b) => a + b) / timeArr.length;
+
+        avgTime = parseInt(avgTime)
         for(let i=0;i < data.functions.length;i++){
             dts.push(changeTimeFormat(data.functions[i][2]))
             ts.push(data.functions[i][1])
+            avgs.push(avgTime)
         }
+
+        let colors = ['#5470C6', '#EE6666']
         const option = {
+            color: colors,
             title: {
               text: app + ' ' + fc
             },
@@ -48,7 +62,7 @@ function report(data) {
                 bottom: '30%'
             },
             legend: {
-              data: [fc + '时间']
+              data: [fc + '时间', '平均时间']
             },
             xAxis:{
                 data:dts,
@@ -58,7 +72,8 @@ function report(data) {
                 }
             },
             yAxis:{},
-            series:{
+            series:[
+            {
                 name: fc + '时间',
                 type:'line',
                 data:ts,
@@ -72,8 +87,28 @@ function report(data) {
                 },
                 symbolSize:20,
                 symbol: 'pin'
+            },
+            {
+                name: '平均时间',
+                type:'line',
+                data:avgs,
+                smooth:true,
+                itemStyle:{
+                    color: '#eb9316'
+                },
+//                areaStyle:{
+//                    color: '#EE6666',
+//                    opacity: 0.3
+//                },
+                symbolSize:20,
+                symbol: 'pin'
             }
+            ]
+
         }
+
+
+
         myChart.setOption(option);
 }
 
@@ -91,11 +126,11 @@ function searchFunction(){
         success: function (data) {
             if (data.code == "200") {
                   console.log(data.functions)
-                  result = result + '<a href="#" class="list-group-item disabled list-rt-item">' + '<div style="float: left;margin-left: 5.5%;">执行方法</div><div style="float: left; margin-left: 19%;">耗时（秒）</div><div style="float: left;margin-left: 15.8%;">最近执行时间</div>' + '<div style="float: right;">执行数</div></a>'
+                  result = result + '<a href="#" class="list-group-item disabled list-rt-item">' + '<div style="float: left;margin-left: 5.5%;">执行方法</div><div style="float: left; margin-left: 19%;">耗时（豪秒）</div><div style="float: left;margin-left: 15.8%;">最近执行时间</div>' + '<div style="float: right;">执行数</div></a>'
                   if (data.functions.length > 0){
                         for(let i=0;i < data.functions.length;i++){
-                            let minSecond = parseInt(data.functions[i][5]) / 1000;
-                            let maxSecond = parseInt(data.functions[i][6]) / 1000;
+                            let minSecond = parseInt(data.functions[i][5]) ;
+                            let maxSecond = parseInt(data.functions[i][6]) ;
                             maxSecond = maxSecond.toFixed(2)
                             minSecond = minSecond.toFixed(2)
                             dt = changeTimeFormat(data.functions[i][2])
@@ -103,7 +138,7 @@ function searchFunction(){
                             for(let i=fst.length;i<5;i++){
                                 fst = fst + '&#12288;'
                             }
-                            result = result + '<a href="#" value="'+data.functions[i][3]+'" class="list-group-item list-rt-item" onclick="aclick(this)">' + '<div style="float: left;margin-left: 6%;;width: 208px;">'+fst+'</div><div style="float: left;margin-left: 6%;;width: 155px;">'+minSecond+'</div><div style="float: left;margin-left: 6%;">'+dt+'</div><span class="badge">'+data.functions[i][4]+'</span></a>'
+                            result = result + '<a href="#" value="'+data.functions[i][3]+'" class="list-group-item list-rt-item" onclick="aclick(this)">' + '<div style="float: left;margin-left: 6%;;width: 269px;">'+fst+'</div><div style="float: left;width: 170px;">'+minSecond+'</div><div style="float: left;margin-left: 6%;">'+dt+'</div><span class="badge">'+data.functions[i][4]+'</span></a>'
 //                            result = result + '<a href="#" value="'+data.functions[i][3]+'" class="list-group-item list-rt-item" onclick="aclick(this)">' + '<div style="float: left;margin-left: 6%;">'+fst+'</div><div style="float: left;margin-left: 18%;">'+minSecond+'</div><div style="float: left;margin-left: 18%;">'+dt+'</div><span class="badge">'+data.functions[i][4]+'</span></a>'
                         }
 
@@ -126,18 +161,24 @@ function aclick(obj){
         type: 'GET',
         dataType: 'json',
         success: function (data) {
+            let timeArr = []
+            for(let i=0;i<data.functions.length;i++){
+                timeArr.push(data.functions[i][1])
+            }
+            let avgTime = timeArr.reduce((a, b) => a + b) / timeArr.length;
+            avgTime = parseInt(avgTime)
             if (data.code == "200") {
                 if (data.functions.length > 0){
                         result = result + '<a href="#" class="list-group-item disabled">' + ' 详情</a>'
-                        console.log(result)
                         for(let i=0;i < data.functions.length;i++){
                             dt = changeTimeFormat(data.functions[i][2])
                             let fst = data.functions[i][0]
-                            for(let i=fst.length;i<5;i++){
-                                fst = fst + '&#12288;'
-                            }
-                            result = result + '<a href="#"  value="'+data.functions[i][0]+'" class="list-group-item list-rt-item da" >' + '<div style="float: left;">'+fst+'</div><div style="float: left; margin-left: 6%;">'+(parseInt(data.functions[i][1])/1000).toFixed(2)+'</div><div style="float: left;margin-left: 6%;">'+dt+'</div>'+ '<div style="float: right"><button name="delb" type="button" class="btn btn-danger btn-sm dbtn" onclick="delrest('+data.functions[i][4]+','+data.functions[i][5]+')">删除</button></div>' +'</a>'
+//                            for(let i=fst.length;i<5;i++){
+//                                fst = fst + '&#12288;'
+//                            }
+                            result = result + '<a href="#"  value="'+data.functions[i][0]+'" class="list-group-item list-rt-item da" >' + '<div style="float: left;width: 100px;">'+fst+'</div><div style="float: left;width: 60px;">'+data.functions[i][1]+'</div><div style="float: left">'+dt+'</div>'+ '<div style="float: right"><button name="delb" type="button" class="btn btn-danger btn-sm dbtn" onclick="delrest('+data.functions[i][4]+','+data.functions[i][5]+')">删除</button></div>' +'</a>'
                         }
+                        result = result + '<a href="#" class="list-group-item list-rt-item da" >' + '<div style="float: left;width: 100px;">平均值</div>'+ '<div style="float: left;">'+avgTime+'</div>'+'</a>'
                         report(data)
                 }
             }
@@ -156,6 +197,12 @@ function reloadClick(fid){
         type: 'GET',
         dataType: 'json',
         success: function (data) {
+            let timeArr = []
+            for(let i=0;i<data.functions.length;i++){
+                timeArr.push(data.functions[i][1])
+            }
+            let avgTime = timeArr.reduce((a, b) => a + b) / timeArr.length;
+            avgTime = parseInt(avgTime)
             if (data.code == "200") {
                 if (data.functions.length > 0){
                         result = result + '<a href="#" class="list-group-item disabled">' + ' 详情</a>'
@@ -163,11 +210,12 @@ function reloadClick(fid){
                         for(let i=0;i < data.functions.length;i++){
                             dt = changeTimeFormat(data.functions[i][2])
                             let fst = data.functions[i][0]
-                            for(let i=fst.length;i<5;i++){
-                                fst = fst + '&#12288;'
-                            }
-                            result = result + '<a href="#"  value="'+data.functions[i][0]+'" class="list-group-item list-rt-item da" >' + '<div style="float: left;">'+fst+'</div><div style="float: left; margin-left: 6%;">'+(parseInt(data.functions[i][1])/1000).toFixed(2)+'</div><div style="float: left;margin-left: 6%;">'+dt+'</div>'+ '<div style="float: right"><button type="button" class="btn btn-danger btn-sm dbtn" onclick="delrest('+data.functions[i][4]+','+data.functions[i][5]+')">删除</button></div>' +'</a>'
+//                            for(let i=fst.length;i<5;i++){
+//                                fst = fst + '&#12288;'
+//                            }
+                            result = result + '<a href="#"  value="'+data.functions[i][0]+'" class="list-group-item list-rt-item da" >' + '<div style="float: left;width: 100px;">'+fst+'</div><div style="float: left;width: 60px;">'+data.functions[i][1]+'</div><div style="float: left">'+dt+'</div>'+ '<div style="float: right"><button name="delb" type="button" class="btn btn-danger btn-sm dbtn" onclick="delrest('+data.functions[i][4]+','+data.functions[i][5]+')">删除</button></div>' +'</a>'
                         }
+                        result = result + '<a href="#" class="list-group-item list-rt-item da" >' + '<div style="float: left;width: 100px;">平均值</div>'+ '<div style="float: left;">'+avgTime+'</div>'+'</a>'
                         report(data)
                 }
             }
@@ -223,11 +271,11 @@ function defaultFuncs(){
             if (data.code == "200") {
                   console.log(data.functions)
                   if (data.functions.length > 0){
-                        result = result + '<a href="#" class="list-group-item disabled list-rt-item">' + '<div style="float: left;margin-left: 5.5%;">执行方法</div><div style="float: left; margin-left: 19%;">耗时（秒）</div><div style="float: left;margin-left: 15.8%;">最近执行时间</div>' + '<div style="float: right;">执行数</div></a>'
+                        result = result + '<a href="#" class="list-group-item disabled list-rt-item">' + '<div style="float: left;margin-left: 5.5%;">执行方法</div><div style="float: left; margin-left: 19%;">耗时（豪秒）</div><div style="float: left;margin-left: 15.8%;">最近执行时间</div>' + '<div style="float: right;">执行数</div></a>'
                         console.log(result)
                         for(let i=0;i < data.functions.length;i++){
-                            let minSecond = parseInt(data.functions[i][5]) / 1000;
-                            let maxSecond = parseInt(data.functions[i][6]) / 1000;
+                            let minSecond = parseInt(data.functions[i][5]);
+                            let maxSecond = parseInt(data.functions[i][6]);
                             maxSecond = maxSecond.toFixed(2)
                             minSecond = minSecond.toFixed(2)
                             dt = changeTimeFormat(data.functions[i][2]).trim()
@@ -235,7 +283,7 @@ function defaultFuncs(){
 //                            for(let i=fst.length;i<5;i++){
 //                                fst = fst + '&#12288;'
 //                            }
-                            result = result + '<a href="#" value="'+data.functions[i][3]+'" class="list-group-item list-rt-item" onclick="aclick(this)">' + '<div style="float: left;margin-left: 6%;;width: 208px;">'+fst+'</div><div style="float: left;margin-left: 6%;;width: 155px;">'+minSecond+'</div><div style="float: left;margin-left: 6%;">'+dt+'</div><span class="badge">'+data.functions[i][4]+'</span></a>'
+                            result = result + '<a href="#" value="'+data.functions[i][3]+'" class="list-group-item list-rt-item" onclick="aclick(this)">' + '<div style="float: left;margin-left: 6%;;width: 269px;">'+fst+'</div><div style="float: left;width: 170px;">'+minSecond+'</div><div style="float: left;margin-left: 6%;">'+dt+'</div><span class="badge">'+data.functions[i][4]+'</span></a>'
                         }
                   }else{
                     result = result + ''
