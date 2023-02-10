@@ -206,6 +206,7 @@
                     <input type="hidden" id="qushuju" value="{{ imgfile }}">
                     <script>
                         $("#Prompt").text("视频文件解析成功！");
+                        sessionStorage.setItem("imgfile",document.getElementById("qushuju").getAttribute('value'));
                     </script>
                 {% endif %}
             </div>
@@ -402,8 +403,14 @@
 
     // 加载视频拆帧后的结果
     function loadPicture() {
-        var imagePath = document.getElementById("qushuju").getAttribute('value').split('-')[0]
-        var imageNum = parseInt(document.getElementById("qushuju").getAttribute('value').split('-')[1])
+        try{
+            var imagePath = document.getElementById("qushuju").getAttribute('value').split('-')[0]
+            var imageNum = parseInt(document.getElementById("qushuju").getAttribute('value').split('-')[1])
+        }catch(error){
+            var imagePath = sessionStorage.getItem("imgfile").split('-')[0]
+            var imageNum = parseInt(sessionStorage.getItem("imgfile").split('-')[1])
+        }
+
         for (let index = 1; index <= imageNum; index++) {
             var path = imagePath + "/" + index + ".png"
             imlist =
