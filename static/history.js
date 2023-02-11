@@ -56,13 +56,19 @@ function report(data) {
             color: colors,
             title: {
               text: app + ' ' + fc
+//              ,
+//              textStyle:{
+//                fontSize: 10
+//              }
             },
             tooltip: {},
             grid: {
                 bottom: '30%'
             },
             legend: {
-              data: [fc + '时间', '平均时间']
+              data: [fc + '时间', '平均时间'],
+//              x: 'right',
+              right: 100
             },
             xAxis:{
                 data:dts,

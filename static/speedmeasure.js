@@ -124,8 +124,13 @@ function smartFrameSel(){
     var function_id = smart_function_select.val();　　　　　　　　　　　　　　//获取选中项的值
     var startFrame
     var endFrame
-    var imagePath = document.getElementById("qushuju").getAttribute('value').split('-')[0]
-    var imageNum = parseInt(document.getElementById("qushuju").getAttribute('value').split('-')[1])
+    try{
+        var imagePath = document.getElementById("qushuju").getAttribute('value').split('-')[0]
+        var imageNum = parseInt(document.getElementById("qushuju").getAttribute('value').split('-')[1])
+    }catch(error){
+        var imagePath = sessionStorage.getItem("imgfile").split('-')[0]
+        var imageNum = parseInt(sessionStorage.getItem("imgfile").split('-')[1])
+    }
     console.log("function_id",function_id)
     console.log("imagePath",imagePath)
     console.log("imageNum",imageNum)
@@ -208,7 +213,11 @@ function saveBase(){
     var count = 0
     var startFrame = -1
     var endFrame = -1
-    var imagePath = document.getElementById("qushuju").getAttribute('value').split('-')[0]
+    try{
+        var imagePath = document.getElementById("qushuju").getAttribute('value').split('-')[0]
+    }catch(error){
+        var imagePath = sessionStorage.getItem("imgfile").split('-')[0]
+    }
     console.log("function_id",function_id)
     //保存基线按钮置灰，等后台处理完
     document.getElementById("baseline_btn").setAttribute("disabled",true);
