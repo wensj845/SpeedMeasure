@@ -19,6 +19,7 @@ import shutil
 
 UPLOAD_FOLDER = 'upload/'
 ALLOWED_EXTENSIONS = {'mp4'}
+FRAME_NUM = 10 #全局变量设置每秒拆帧数
 
 speedmeasure = Blueprint('speedmeasure', __name__, url_prefix='/speedmeasure')
 
@@ -96,8 +97,8 @@ def sm():
 def measure():
     start_photo_number = request.values.get("startFrame")
     end_photo_number = request.values.get("endFrame")
-    start_time = (int(end_photo_number)-int(start_photo_number)) * 10
-    return jsonify({"code": "200", "result": start_time, "msg": "计算完成"})
+    Interval = (int(end_photo_number)-int(start_photo_number)) * int(1000/FRAME_NUM)
+    return jsonify({"code": "200", "result": Interval, "msg": "计算完成"})
 
 @speedmeasure.route('/uploader', methods=['GET', 'POST','PUT','PATCH','DELETE'])
 def upload_file():
@@ -253,11 +254,11 @@ def split_video(video_path):
     try:
         sysstr = platform.system()
         if sysstr =="Windows":
-            command = r"ffmpeg.exe -i {audio_path} -r 100 {path_photo}/%d.png".format(
-                        audio_path=video_path, path_photo=path_photo)
+            command = r"ffmpeg.exe -i {audio_path} -r {frame_num} {path_photo}/%d.png".format(
+                        audio_path=video_path, frame_num = FRAME_NUM,path_photo=path_photo)
         else:
-            command = r"./ffmpeg -i {audio_path} -r 100 {path_photo}/%d.png".format(
-                audio_path=video_path, path_photo=path_photo)
+            command = r"./ffmpeg -i {audio_path} -r {frame_num} {path_photo}/%d.png".format(
+                audio_path=video_path, frame_num = FRAME_NUM,path_photo=path_photo)
         os.system(command)
         for root, dir, files in os.walk(path_photo):
             file_count = len(files)

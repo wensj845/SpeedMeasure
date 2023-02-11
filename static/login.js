@@ -1,4 +1,4 @@
-function eyeclicklg(){
+xfunction eyeclicklg(){
     let itpwd = document.getElementById('inputPassword')
     let eye = document.getElementById('eyes');
     let open = "btn btn-default glyphicon glyphicon-eye-open"

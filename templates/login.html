@@ -67,7 +67,10 @@
 
     </div> <!-- /container -->
 
-
+    <script>
+        //重新登录清楚浏览器缓存，避免特殊情况下拆帧图片展示不正常
+        sessionStorage.removeItem("imgfile");
+    </script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../static/assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
